@@ -5,35 +5,20 @@ const { MONGODB_URI } = require('../config');
 
 const Note = require('../models/notes');
 
-// mongoose.connect(MONGODB_URI)
-//   .then(() => {
-//     const searchTerm = /Lady Gaga/i;
-//     let filter = {};
-
-//     if (searchTerm) {
-//       filter.title = { $regex: searchTerm };
-//     }
-
-//     return Note.find(filter).sort({ updatedAt: 'desc' });
-//   })    
-//   .then(results => {
-//     console.log(results);
-//   })
-//   .then(() => {
-//     return mongoose.disconnect()
-//   })
-//   .catch(err => {
-//     console.error(`ERROR: ${err.message}`);
-//     console.error(err);
-//   });
-
-  mongoose.connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI)
   .then(() => {
-    const id = '000000000000000000000002';
-   
+    const searchTerm = /article/i;
+    let filter = {};
 
-    return Note.findById(id);
-  })    
+    if (searchTerm) {
+      filter.title = { $regex: searchTerm };
+    }
+    /*
+    find({$or: [{ title:{$regex: /searchTerm/i}}, {content:
+    {$regex: /`${searchTerm}`/i}}]});
+*/
+return Note.find({$or : [filter, {content: { $regex: searchTerm }}]}).sort({ updatedAt: 'desc' });
+  })       
   .then(results => {
     console.log(results);
   })
@@ -44,6 +29,24 @@ const Note = require('../models/notes');
     console.error(`ERROR: ${err.message}`);
     console.error(err);
   });
+
+  // mongoose.connect(MONGODB_URI)
+  // .then(() => {
+  //   const id = '000000000000000000000002';
+   
+
+  //   return Note.findById(id);
+  // })    
+  // .then(results => {
+  //   console.log(results);
+  // })
+  // .then(() => {
+  //   return mongoose.disconnect()
+  // })
+  // .catch(err => {
+  //   console.error(`ERROR: ${err.message}`);
+  //   console.error(err);
+  // });
 
 
 //CREATE
