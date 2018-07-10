@@ -3,17 +3,22 @@
 const express = require('express');
 
 const router = express.Router();
-
+const Note = require('../models/notes');
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-
-  console.log('Get All Notes');
-  res.json([
-    { id: 1, title: 'Temp 1' },
-    { id: 2, title: 'Temp 2' },
-    { id: 3, title: 'Temp 3' }
-  ]);
-
+  const { searchTerm } = req.query;
+  let filter = {};
+  if (searchTerm) {
+    filter.title = { $regex: searchTerm };
+  }
+  return Note.find(filter).sort({ updatedAt: 'desc' })      
+    .then(results => {
+      if(results){
+        res.json(results);
+      }else{
+        next();
+      }
+    });
 });
 
 /* ========== GET/READ A SINGLE ITEM ========== */
