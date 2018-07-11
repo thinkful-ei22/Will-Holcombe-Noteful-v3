@@ -23,17 +23,37 @@ router.get('/', (req, res, next) => {
 
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
-
-  console.log('Get a Note');
-  res.json({ id: 1, title: 'Temp 1' });
-
+  const { id } = req.params;
+  
+  
+  return Note.findById(id).sort({ updatedAt: 'desc' })      
+    .then(results => {
+      if(results){
+        res.json(results);
+      }else{
+        next();
+      }
+    });
 });
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
+  const {title, content} = req.body;
+  const newItem = {
+    title,
+    content
+  };
+  console.log(newItem);
+  if (!title) {
+    const err = new Error('Missing `title` in request body');
+    err.status = 400;
+    return next(err);
+  }
 
-  console.log('Create a Note');
-  res.location('path/to/new/document').status(201).json({ id: 2, title: 'Temp 2' });
+  return Note.create(newItem)   
+  .then(([result]) => {
+    res.location(`${req.originalUrl}/${result.id}`).status(201).json(result);
+  });
 
 });
 
