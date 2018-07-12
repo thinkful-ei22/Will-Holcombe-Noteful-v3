@@ -2,16 +2,14 @@
 
 const mongoose = require('mongoose');
 
-const noteSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  content: String,
-  folderId: {type: mongoose.Schema.Types.ObjectId, ref: 'Folder'}
+const folderSchema = new mongoose.Schema({
+  name: { type: String, required: true, unique: true },
 });
 
 // Add `createdAt` and `updatedAt` fields
-noteSchema.set('timestamps', true);
+folderSchema.set('timestamps', true);
 
-noteSchema.set('toObject', {
+folderSchema.set('toObject', {
     virtuals: true,     // include built-in virtual `id`
     versionKey: false,  // remove `__v` version key
     transform: (doc, ret) => {
@@ -20,4 +18,4 @@ noteSchema.set('toObject', {
   });
 
 
-module.exports = mongoose.model('Note', noteSchema);
+module.exports = mongoose.model('Folder', folderSchema);
