@@ -1,34 +1,34 @@
-'use strict';
+// 'use strict';
 
-const mongoose = require('mongoose');
-const { MONGODB_URI } = require('../config');
+// const mongoose = require('mongoose');
+// const { MONGODB_URI } = require('../config');
 
-const Note = require('../models/notes');
+// const Note = require('../models/notes');
 
-mongoose.connect(MONGODB_URI)
-  .then(() => {
-    const searchTerm = /article/i;
-    let filter = {};
+// mongoose.connect(MONGODB_URI)
+//   .then(() => {
+//     const searchTerm = /article/i;
+//     let filter = {};
 
-    if (searchTerm) {
-      filter.title = { $regex: searchTerm };
-    }
-    /*
-    find({$or: [{ title:{$regex: /searchTerm/i}}, {content:
-    {$regex: /`${searchTerm}`/i}}]});
-*/
-return Note.find({$or : [filter, {content: { $regex: searchTerm }}]}).sort({ updatedAt: 'desc' });
-  })       
-  .then(results => {
-    console.log(results);
-  })
-  .then(() => {
-    return mongoose.disconnect()
-  })
-  .catch(err => {
-    console.error(`ERROR: ${err.message}`);
-    console.error(err);
-  });
+//     if (searchTerm) {
+//       filter.title = { $regex: searchTerm };
+//     }
+//     /*
+//     find({$or: [{ title:{$regex: /searchTerm/i}}, {content:
+//     {$regex: /`${searchTerm}`/i}}]});
+// */
+// return Note.find({$or : [filter, {content: { $regex: searchTerm }}]}).sort({ updatedAt: 'desc' });
+//   })       
+//   .then(results => {
+//     console.log(results);
+//   })
+//   .then(() => {
+//     return mongoose.disconnect()
+//   })
+//   .catch(err => {
+//     console.error(`ERROR: ${err.message}`);
+//     console.error(err);
+//   });
 
   // mongoose.connect(MONGODB_URI)
   // .then(() => {
