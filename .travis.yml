@@ -2,4 +2,10 @@ language: node_js
 node_js: node
 services:
 - mongodb
-deploy:app: blooming-peak-58834
+deploy:
+  provider: heroku
+  api_key:
+    secure: SDzS9oxx1MgTG0VakBsL7n12Ezs2NCO80CRguwpP5XDFu+jU2B9SkiMRI+m5QN5GJ2HkHcFu3TAsWfqYijS48r7/MAv17oo4BmBcxY64sUzGXcSbkUIS/gY5gvNsUfSOpQOpyrsN7/ZAc5GRiwKW1tL89yBgY7/+uH8bn34Gc9lEs8q2uT1G7xVxVG2IFSJCorn87bQx2fm37aQhhX6VG2g6MxqYYMSmJXk+XBXO0LfoTJe+JKuROK6G7TmcEkRBRBgPbqObRDToASsdFnTGpZFBi9s1b1p4CrvnnXdUMuw9OM+3cyqnRmV9Z3reKykPIT/T8k0l03+jnFG1LCDqfrbB9a9WR4nVFWIMIgpZsE5TtTbVS0deFkFBaOgQYvxWwV3tB/w4kdPQsXjGdHRpnzcnfYvPOQQgTPAQJhpfL8zqZbx8c9JWlbRd2nKAG95nJZbnB0+uCEjjStz0TzivDx4I2yrqb8uMxS+U/CkyhcdGmSadZwuk0fNhXOQEjyLJxchDfmtAMqXUrFOUlkT4ZC8RGim+1AuAU1s7qNaS1TkrI/d4M9EEMpRhoSAlXQgO/V0+907k+q3yCdFQnf/NtWX76gRFZM2iBTlBu5mXUjsFjtJKQR+CFiUuH0KBgjvtBx/lWDBwvCpbmn+qN+6TwjKf8wRnUnQjybP7f6n0ujs=
+  app: dynowill
+  on:
+    repo: thinkful-ei22/Will-Holcombe-noteful-v3
