@@ -33,7 +33,7 @@ router.get('/', (req, res, next) => {
 });
 
 /* ========== GET/READ A SINGLE ITEM ========== */
-router.get('/:id', (req, res, next) => {
+router.get('/:id', (req,  res, next) => {
   const { id } = req.params;
 
 
