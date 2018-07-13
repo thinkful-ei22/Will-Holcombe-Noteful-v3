@@ -80,7 +80,7 @@ describe('Notes API resource', function() {
           expect(res).to.be.json;
 
           expect(res.body).to.be.an('object');
-          expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt');
+          expect(res.body).to.have.keys('id', 'title', 'content', 'folderId', 'createdAt', 'updatedAt');
 
           // 3) then compare database results to API response
           expect(res.body.id).to.equal(data.id);
@@ -96,74 +96,74 @@ describe('Notes API resource', function() {
     it('should return all notes', function () {
     // 1) Call the database **and** the API
     // 2) Wait for both promises to resolve using `Promise.all`
-    return Promise.all([
-      Note.find(),
-      chai.request(app).get('/api/notes')
-    ])
+      return Promise.all([
+        Note.find(),
+        chai.request(app).get('/api/notes')
+      ])
       // 3) then compare database results to API response
-      .then(([data, res]) => {
+        .then(([data, res]) => {
     
-        expect(res).to.have.status(200);
-        expect(res).to.be.json;
-        expect(res.body).to.be.a('array');
-        expect(res.body).to.have.length(data.length);
-      });
-  });
+          expect(res).to.have.status(200);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('array');
+          expect(res.body).to.have.length(data.length);
+        });
+    });
   });
 
 
   describe('PUT /api/notes/:id', function () {
     it('should update item and return said item if provided valid data', function () {
-        const updateItem = {
-            'title': 'The best article about cats ever!',
-            'content': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...'
-          };
-        let res, data;
-        return Note.findOne()
+      const updateItem = {
+        'title': 'The best article about cats ever!',
+        'content': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...'
+      };
+      let res, data;
+      return Note.findOne()
         .then(_data => {
-            data = _data;
-            return chai.request(app).put(`/api/notes/${data.id}`)
+          data = _data;
+          return chai.request(app).put(`/api/notes/${data.id}`)
             .send(updateItem);
         })
         .then(function (_res) {
-            res = _res;
-            expect(res).to.have.status(200);
+          res = _res;
+          expect(res).to.have.status(200);
             
-            expect(res).to.be.json;
-            expect(res.body).to.be.a('object');
-            expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt');
-            // 2) then call the database
-            return Note.findById(res.body.id);
-          })
-          // 3) then compare the API response to the database results
-          .then(updatedData => {
-            expect(res.body.id).to.equal(updatedData.id);
-            expect(res.body.title).to.equal(updatedData.title);
-            expect(res.body.content).to.equal(updatedData.content);
-            expect(new Date(res.body.createdAt)).to.eql(updatedData.createdAt);
-            expect(new Date(res.body.updatedAt)).to.eql(updatedData.updatedAt);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.keys('id', 'title', 'content', 'folderId', 'createdAt', 'updatedAt');
+          // 2) then call the database
+          return Note.findById(res.body.id);
+        })
+      // 3) then compare the API response to the database results
+        .then(updatedData => {
+          expect(res.body.id).to.equal(updatedData.id);
+          expect(res.body.title).to.equal(updatedData.title);
+          expect(res.body.content).to.equal(updatedData.content);
+          expect(new Date(res.body.createdAt)).to.eql(updatedData.createdAt);
+          expect(new Date(res.body.updatedAt)).to.eql(updatedData.updatedAt);
         });
         
     });
-});
+  });
 
-describe('DELETE /api/notes/:id', function () {
+  describe('DELETE /api/notes/:id', function () {
     it('should delete item', function () {
     // 1) Call the database **and** the API
-    let data;
-    // 1) First, call the database
-    return Note.findOne()
-      .then(_data => {
-        data = _data;
-        // 2) then call the API with the ID
-        return chai.request(app).del(`/api/notes/${data.id}`);
-      })
-      .then((res) => {
-        expect(res).to.have.status(204);
+      let data;
+      // 1) First, call the database
+      return Note.findOne()
+        .then(_data => {
+          data = _data;
+          // 2) then call the API with the ID
+          return chai.request(app).del(`/api/notes/${data.id}`);
+        })
+        .then((res) => {
+          expect(res).to.have.status(204);
         
 
-});
+        });
 
     });
-});
+  });
 });
