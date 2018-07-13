@@ -7,9 +7,10 @@ const app = require('../server');
 const { TEST_MONGODB_URI } = require('../config');
 
 const Note = require('../models/notes');
-
+const Folder = require('../models/folders');
 const seedNotes = require('../db/seed/notes');
 
+const seedFolders = require('../db/seed/folders');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
@@ -20,7 +21,11 @@ describe('Notes API resource', function() {
   });
 
   beforeEach(function () {
-    return Note.insertMany(seedNotes);
+    return Promise.all([
+      Note.insertMany(seedNotes),
+      Folder.insertMany(seedFolders),
+    ]);
+
   });
 
   afterEach(function () {
@@ -109,7 +114,34 @@ describe('Notes API resource', function() {
           expect(res.body).to.have.length(data.length);
         });
     });
+
+    it('should return only relevant notes if filtered by folder', function () {
+      // 1) Call the database **and** the API
+      // 2) Wait for both promises to resolve using `Promise.all`
+      let data;
+      return Folder.findOne()
+        .then(_data => {
+          data = _data;
+          return Promise.all([
+            Note.find({folderId:data.id}),
+            chai.request(app).get(`/api/notes/?folderId=${data.id}`)
+          ]);
+        })
+        .then(([data, res]) => {
+      
+          expect(res).to.have.status(200);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('array');
+          expect(res.body).to.have.length(data.length);
+        });
+    });
+
+
   });
+
+
+
+
 
 
   describe('PUT /api/notes/:id', function () {
